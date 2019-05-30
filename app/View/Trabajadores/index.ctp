@@ -1,0 +1,35 @@
+<div ng-controller="trabajadoresIndex" ng-cloak>
+	<p ng-bind-html="cargador" ng-show="loader"></p>
+	<div ng-show="tablaDetalle">
+		<id class="mensaje"></id>
+		<div class="row">
+			<div class="col-md-12">
+				<h3>Lista de Trabajadores</h3>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<?php echo $this->element("botonera"); ?>
+				<div>
+					<br>	
+					<div ui-grid="gridOptions" ui-grid-selection ui-grid-exporter ui-grid-auto-resize ui-grid-resize-columns class="grid"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php echo $this->element("ficha_trabajador"); ?>
+</div>
+<?php 
+	echo $this->Html->script(array(
+		'angularjs/controladores/app',
+		'angularjs/directivas/trabajadores/trabajadores',
+		'angularjs/filtros/filtros',
+		"angularjs/servicios/tipo_contratos/tipo_contratos",
+		'angularjs/servicios/servicios',
+		'angularjs/servicios/trabajadores',
+		'angularjs/factorias/trabajadores',
+		"angularjs/factorias/factoria",
+		'angularjs/controladores/trabajadores',
+		'bootstrap-datepicker'
+	));
+?> 

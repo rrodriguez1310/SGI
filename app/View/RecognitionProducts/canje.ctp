@@ -1,0 +1,49 @@
+<form class="form-horizontal">
+	<div class="container">
+		<div class="col-md-10 col-md-offset-1 toppad" >
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="row">
+						<div class="col-md-12">
+							<h3 class="panel-title"><?php echo __('Detalle del producto'); ?></h3>
+						</div>
+					</div>
+				</div>
+				<div class="panel-body">	
+					<div class="col-md-12">
+						<div class="panel-body">
+							<div class="col-md-6">
+								<div  class="col-md-12">
+									<label for="" class="col-md-4 control-label">Nombre:</label>
+									<div class="col-md-8 baja mayuscula"><?php echo h($recognitionProduct['RecognitionProduct']['name']); ?></div>
+								</div>
+
+								<div  class="col-md-12">
+									<label for="" class="col-md-4 control-label">Valor:</label>
+									<div class="col-md-8 baja mayuscula"><?php echo h($recognitionProduct['RecognitionProduct']['points']); ?></div>
+								</div>
+								
+								<div  class="col-md-12">
+									<label for="" class="col-md-4 control-label">Descripción:</label>
+									<div class="col-md-8 baja mayuscula"><?php echo h($recognitionProduct['RecognitionProduct']['descrption']); ?></div>
+								</div>
+
+                            </div>
+							<div class="col-md-6" style="height: 240px;">
+								<div  class="col-md-12">
+									<label for="" class="col-md-4 control-label">Imagen:</label>
+									<div class="col-md-12 "><?php echo $this->Html->image('../files/recognition_product/image/'.$recognitionProduct['RecognitionProduct']['imagedir'].'/vga_'.$recognitionProduct['RecognitionProduct']['image']); ?></div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<div class="panel-footer">
+				<a href="<?php echo $this->Html->url(array("controller" => "recognitionCollaborators" ,"action"=>"collaborator"))?>" class="volver btn btn-default"><i class="fa fa-mail-reply-all"></i> Volver</a>
+				</div> 
+			</div>
+		</div>
+	</div>
+</form>
+

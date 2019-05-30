@@ -1,0 +1,55 @@
+;CAMPEONATO Scotiabank Clausura 2016-2017;;;;;;PROGRAMACION DE TRANSMISIONES CLARO;;;;;;
+id;LOCAL;;VISITA;ESTADIO;Campeonato;SEÑAL;Horario de puesta en marcha;OPERACION;Medio Tx Id;Medio Tx Nombre;Contacto Estadio;Recepcion de señal en CDF;Anexo
+;;;;;;;;;;;;;
+228;U. De Concepcion;v/s;U. Española;Bicentenario Ester Roa;Scotiabank;Principal;17:30;1;1;Fibra Óptica;Jorge Hernandez;HD1;213
+;Viernes 05 de mayo de 2017;;;;;Respaldo;17:30;1;2;Micro Ondas;Jorge Hernandez;HD2;213
+;Inicio Tx;17:20;;;;RADIO;17:30;1;1;Fibra Óptica;Jorge Hernandez;HD3;213
+229;U. De Chile;v/s;Cobresal;Nacional;Scotiabank;Principal;;;;;;;
+;Viernes 05 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;20:10;;;;RADIO;;;;;;;
+232;A. Italiano;v/s;S. Wanderers;Bicentenario De La Florida;Scotiabank;Principal;;;;;;;
+;Sábado 06 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;17:40;;;;RADIO;;;;;;;
+231;San Luis;v/s;Dep. Temuco;Bicentenario Lucio Fariña;Scotiabank;Principal;;;;;;;
+;Sábado 06 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;14:50;;;;RADIO;;;;;;;
+230;Palestino;v/s;O'Higgins;Municipal De La Cisterna;Scotiabank;Principal;;;;;;;
+;Sábado 06 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;11:20;;;;RADIO;;;;;;;
+235;Huachipato;v/s;U. Catolica;Huachipato-Cap Acero;Scotiabank;Principal;;;;;;;
+;Domingo 07 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;16:55;;;;RADIO;;;;;;;
+233;Everton;v/s;Colo Colo;Sausalito;Scotiabank;Principal;;;;;;;
+;Domingo 07 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;11:20;;;;RADIO;;;;;;;
+234;Dep. Iquique;v/s;Dep. Antofagasta;Cavancha;Scotiabank;Principal;;;;;;;
+;Domingo 07 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;14:25;;;;RADIO;;;;;;;
+237;Everton;v/s;Huachipato;Sausalito;Scotiabank;Principal;;;;;;;
+;Viernes 12 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;19:20;;;;RADIO;;;;;;;
+239;A. Italiano;v/s;U. De Concepcion;Bicentenario De La Florida;Scotiabank;Principal;;;;;;;
+;Sábado 13 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;14:50;;;;RADIO;;;;;;;
+240;U. Catolica;v/s;Dep. Iquique;San Carlos De Apoquindo;Scotiabank;Principal;;;;;;;
+;Sábado 13 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;17:40;;;;RADIO;;;;;;;
+241;San Luis;v/s;U. Española;Bicentenario Lucio Fariña;Scotiabank;Principal;;;;;;;
+;Sábado 13 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;20:10;;;;RADIO;;;;;;;
+238;S. Wanderers;v/s;Cobresal;Bicentenario Elias Figueroa;Scotiabank;Principal;;;;;;;
+;Sábado 13 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;11:20;;;;RADIO;;;;;;;
+242;O'Higgins;v/s;U. De Chile;Bicentenario El Teniente;Scotiabank;Principal;;;;;;;
+;Domingo 14 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;11:20;;;;RADIO;;;;;;;
+243;Dep. Temuco;v/s;Palestino;Bicentenario German Becker;Scotiabank;Principal;;;;;;;
+;Domingo 14 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;14:30;;;;RADIO;;;;;;;
+244;Colo Colo;v/s;Dep. Antofagasta;Monumental;Scotiabank;Principal;;;;;;;
+;Domingo 14 de mayo de 2017;;;;;Respaldo;;;;;;;
+;Inicio Tx;17:10;;;;RADIO;;;;;;;
+;;;;;;;;;;;;;
+;;;;;;;;;;;;;
+;;;;;;;;;1 = Fibra Óptica;;;;
+;;;;;;;;;2 = Microondas;;;;

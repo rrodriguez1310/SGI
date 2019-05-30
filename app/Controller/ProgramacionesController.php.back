@@ -1,0 +1,239 @@
+<?php
+App::uses('AppController', 'Controller');
+/**
+ * Programaciones Controller
+ *
+ * @property Programacione $Programacione
+ * @property PaginatorComponent $Paginator
+ */
+class ProgramacionesController extends AppController {
+
+/**
+ * Components
+ *
+ * @var array
+ */
+	public $components = array('Paginator');
+
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function index() {
+		$this->Programacione->recursive = 0;
+		$this->set('programaciones', $this->Paginator->paginate());
+	}
+
+/**
+ * view method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function view($id = null) {
+		if (!$this->Programacione->exists($id)) {
+			throw new NotFoundException(__('Invalid programacione'));
+		}
+		$options = array('conditions' => array('Programacione.' . $this->Programacione->primaryKey => $id));
+		$this->set('programacione', $this->Programacione->find('first', $options));
+	}
+
+/**
+ * add method
+ *
+ * @return void
+ */
+	public function add() {
+		if ($this->request->is('post')) {
+			$this->Programacione->create();
+			if ($this->Programacione->save($this->request->data)) {
+				$this->Session->setFlash(__('The programacione has been saved.'));
+				return $this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The programacione could not be saved. Please, try again.'));
+			}
+		}
+		$logProgramas = $this->Programacione->LogPrograma->find('list');
+		$channels = $this->Programacione->Channel->find('list');
+		$this->set(compact('logProgramas', 'channels'));
+	}
+
+/**
+ * edit method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function edit($id, $idLog) {
+
+		$this->autoRender = false;
+		$this->response->type("json");
+
+		if (!$this->Programacione->exists($id)) {
+			throw new NotFoundException(__('El Id es invalido no se puede editar la información'));
+		}
+		
+		if ($this->request->is(array('get'))) {
+			$this->request->data["Programacione"]["id"] = $this->params->pass[0];
+			$this->request->data["Programacione"]['log_programa_id'] = $this->params->pass[1];
+
+			if ($this->Programacione->save($this->request->data)) {
+				
+				$this->loadModel("LogPrograma");
+				$this->request->data["LogPrograma"]['id'] = $this->params->pass[1];
+				$this->request->data["LogPrograma"]["programacione_id"] = $this->params->pass[0];
+				$this->LogPrograma->save($this->request->data['LogPrograma']);
+
+				return json_encode(array("Error"=>1, "Mensaje"=>"El registro se edito correctamente"));
+			} else {
+				return json_encode(array("Error"=>0, "Mensaje"=>"El registro no se edito correctamente"));
+			}
+		} 
+	}
+
+/**
+ * delete method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function delete($id = null) {
+		$this->Programacione->id = $id;
+		if (!$this->Programacione->exists()) {
+			throw new NotFoundException(__('Invalid programacione'));
+		}
+		$this->request->allowMethod('post', 'delete');
+		if ($this->Programacione->delete()) {
+			$this->Session->setFlash(__('The programacione has been deleted.'));
+		} else {
+			$this->Session->setFlash(__('The programacione could not be deleted. Please, try again.'));
+		}
+		return $this->redirect(array('action' => 'index'));
+	}
+
+	public function programacionJson($tipoSignal){
+		$this->autoRender = false;
+		$this->response->type("json");
+		
+		$contenidoJson = file_get_contents('http://www.cdf.cl/api/movil_programacion.php?format=json&senal='.$tipoSignal.'&fecha='.date('Ymd'));
+		$programacion = json_decode($contenidoJson, true);
+
+		$programacionArray = "";
+
+		foreach ($programacion['data'] as $key => $value) {
+			$programacionArray[] = array(
+				'imagen' => trim($value['imagethumb'], ' '),
+				'hora' =>trim($value['time'], ' '),
+				'fecha' =>trim($value['date'], ' '),
+				'nombre'=>trim($value['title'], ' '),
+				'fecha_full'=>trim($value['datem'], ' '),
+				'descripcion'=>trim($value['description'], ' '),
+				'signal'=>$programacion['meta']['channel']
+			);
+		}
+		
+		if($this->Programacione->saveAll($programacionArray)){
+			echo json_encode("se registro");
+			CakeLog::write('actividad', 'Se guardo la programacion -' . date('Y-m-d'));
+		}else{ 
+			echo json_encode("no se registro");
+			CakeLog::write('actividad', 'No se guardo la programacion -' . date('Y-m-d'));
+		}
+		 	
+	}
+
+	public function listaProgramacion($fecha){
+		$this->autoRender = false;
+		$this->response->type("json");
+
+		$listaProgramacion = $this->Programacione->find('all', array(
+			'conditions'=>array(
+				'fecha_full'=>$this->params->pass[0],
+				'signal'=>$this->params->pass[1],
+				),
+			'recursive'=>-1
+		));
+
+		$programacionList = "";
+		if(!empty($listaProgramacion)){
+			foreach ($listaProgramacion as $key => $value) {
+				$segnal = "";
+				$programacionList[] = array(
+					'id' => $value['Programacione']['id'],
+					'log_programa_id' => $value['Programacione']['log_programa_id'],
+					'fecha_full' => $value['Programacione']['fecha_full'],
+					'descripcion' => $value['Programacione']['descripcion'],
+					'fecha' => $value['Programacione']['fecha'],
+					'hora' => $value['Programacione']['hora'],
+					'nombre' => $value['Programacione']['nombre'],
+					'signal' => substr($value['Programacione']['signal'], 3)
+				);
+			}
+		}
+		
+		return  json_encode($programacionList);
+	}
+
+	public function listaLog(){
+
+		$this->autoRender = false;
+		$this->response->type("json");
+		$this->loadModel('LogPrograma');
+
+		$canal = "";
+
+		if($this->params->pass[1] === 'CDF Básico'){
+			$canal = 'SD_CDF_BAS';
+		}else if( $this->params->pass[1] === 'CDF HD'){
+			$canal = 'HD_CDF_HD';
+		}else{
+			$canal = 'SD_CDF_PREM';
+		}
+
+		$listaLog = $this->LogPrograma->find("all", array(
+			'conditions'=>array(
+				'fecha'=>$this->params->pass[0],
+				'nombre_canal'=>$canal,
+				),
+			'recursive'=>-1
+		));
+
+		$logList = "";
+		
+		if(!empty($listaLog)){
+			foreach ($listaLog as $key => $value) {
+				$programa = explode('/', $value['LogPrograma']['clip']);
+				$key = array_keys($programa);
+				$ultimoKey = end($key);
+
+				$logList[] = array(
+					'id' => $value['LogPrograma']['id'],
+					'fecha' => $value['LogPrograma']['fecha'],
+					'numero_evento' => $value['LogPrograma']['numero_evento'],
+					'inicio_presupuestado' => $value['LogPrograma']['inicio_presupuestado'],
+					'hora_inicio' => $value['LogPrograma']['hora_inicio'],
+					'duracion' => $value['LogPrograma']['duracion'],
+					'nombre' => $programa[$ultimoKey],
+					'dia_tv' => $value['LogPrograma']['dia_tv'],
+					'estado' => $value['LogPrograma']['estado'],
+					'nombre_canal' => $value['LogPrograma']['nombre_canal'],
+				);
+			}
+		}
+		return  json_encode($logList);
+	}
+
+	public function conciliacion_programacion(){
+		Configure::write('debug', 1); 
+		$this->layout = "angular";
+	}
+
+	public function informeRaiting(){
+		
+	}
+}
+

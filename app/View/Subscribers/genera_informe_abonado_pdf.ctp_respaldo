@@ -1,0 +1,1920 @@
+<?php $promediorealPenetracion = ""; ?>
+<ul class="menu_secundario nav nav-pills">
+	<li class="pull-right">
+		<a href="#" id="envia_informeAbonado" class="envia_informeAbonado btn btn-default btn-mx" data-toggle="modal" data-target="#informeAbonadosPorEmail"><i class="fa fa-send"></i> Enviar informe de abonados</a> 
+	</li>
+	<li class="pull-right">&nbsp;</li>
+	<li class="pull-right">
+		<a href="#" class="generarPdf  btn btn-default btn-mx"><i class="fa fa-file-pdf-o fa-lg "></i> Exportar a PDF</a>
+	</li>
+</ul>
+
+<div id="cuerpoHtmlTabla">
+	
+<?php if(!empty($operadoresNoAgrupados) && !empty($abonadosNoAgrupados)) :?>
+<h2 align="center">Informe Abonados <?php echo $mesLogo . ' ' .$agnoLogo?> </h2>
+	<h4 align="left" >RESUMEN ABONADOS TOTALES</h4>
+
+<table style="width: 100%; width: 100%; border-collapse: collapse;" border="1">
+  <tbody>
+    <tr>
+      <td style="width:13%;background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;">Abonados</td>
+      <td style="width:43.5%; background-color: #4F80BC; color:#FFF; font-weight: bold; border: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000; text-align: center;" colspan="4" rowspan="1">Abonados Reales</td>
+      <td style="width:43.5%; background-color: #4F80BC; color:#FFF; font-weight: bold; border: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000; text-align: center;" colspan="4" rowspan="1">Abonados Promedio <?php echo $mesesArray[reset($mesePromedio)] . ' - ' .$mesesArray[end($mesePromedio)];?></td>
+    </tr>
+    <tr>
+      <td style="width:13%;background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;"><br>
+      </td>
+       <?php 
+          foreach($mesesPedidos as $key => $mesesPedido) : 
+            foreach($meses as $mes) :  
+            if($mes["Month"]["id"] == $mesesPedido) : 
+        ?>
+        
+      <td style="width:10.8%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border:1px solid #000;" class="resumenMesUno">
+      <?php echo $mes["Month"]["nombre"]; ?> - 
+            <?php 
+            	if(!empty($agnosPedidos))
+				{
+					if(isset($agnosPedidos[$key]))
+					{
+						echo $agnosArray[$agnosPedidos[$key]];
+					}else{
+						echo $agnosArray[reset($agnosPedidos)];
+					}
+				}
+            ?>
+      </td>
+      <?php endif; ?>
+      <?php endforeach; ?>
+      <?php endforeach; ?>
+      
+      <td style="width:21.75%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border:1px solid #000;" colspan="2" rowspan="1">Variación</td>
+      <td style="width:10.8%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border:1px solid #000;">Presupuestado</td>
+      <td style="width:10.8%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border:1px solid #000;">Real</td>
+      <td style="width:21.75%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border:1px solid #000;" colspan="2" rowspan="1">Variación</td>
+    </tr>
+    <?php foreach($operadoresNoAgrupados as $idChannel => $operadoresNoAgrupado) : ?>
+    <tr>
+      <td style="padding-left:5px; border:1px solid #000;"><?php echo $channelArray[$idChannel]; ?></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="totalAbonadosMesUno-<?php echo $idChannel;?>"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="totalAbonadosMesDos-<?php echo $idChannel;?>"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="restaVariacion-<?php echo $idChannel;?>"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="variacionPorcentaje-<?php echo $idChannel;?>"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="variacionPresupuestado-<?php echo $idChannel;?>"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="variacionReal-<?php echo $idChannel;?>">1</td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="restaPromedio-<?php echo $idChannel;?>">2</td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="VariacionPromedio-<?php echo $idChannel;?>">3</td>
+    </tr>
+    <?php endforeach; ?>
+    <td style="padding-left:5px; border:1px solid #000;">PENETRACIÓN</td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="penetracionMesUno"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="penetracionMesDos"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="variacion"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="variacionPorcentaje"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="presupuestado"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="presupuestadoReal"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="presupuestadoResta"></td>
+      <td style="padding-right:10px; width:10.8%; text-align: right; border:1px solid #000000;" class="presupuestadoPromedio"></td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/>
+
+
+<?php foreach($operadoresNoAgrupados as $idChannel => $operadoresNoAgrupado) : ?>
+<h4 align="left" >DETALLE ABONADOS OPERADORES SEÑAL <?php echo $channelArray[$idChannel]; ?> </h4>
+<table style="width: 100%; width: 100%; border-collapse: collapse;" border="1">
+      <tbody>
+        <tr>
+          <td colspan="1" rowspan="2" style="width:13%;  background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-top:1px solid #000; border-left:1px solid #000;  border-right: 1px solid #000;">Abonados</td>
+         
+            <?php 
+              foreach($mesesPedidos as $key => $mesesPedido) : 
+                foreach($meses as $mes) :  
+                if($mes["Month"]["id"] == $mesesPedido) : 
+            ?>
+          <td colspan="2" rowspan="1" style="width:29%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;">
+            <?php echo $mes["Month"]["nombre"]; ?> - 
+            <?php 
+            	if(!empty($agnosPedidos))
+				{
+					if(isset($agnosPedidos[$key]))
+					{
+							
+						echo $agnosArray[$agnosPedidos[$key]];
+					}else{
+						echo $agnosArray[reset($agnosPedidos)];
+					}
+				}
+            ?>
+          </td>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endforeach; ?>
+          <td colspan="2" rowspan="1" style="width:29%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;">promedio meses <?php echo $mesesArray[reset($mesePromedio)] . ' - ' .$mesesArray[end($mesePromedio)];?></td>
+        </tr>
+        <tr>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real </td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real </td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+        </tr>
+        <?php foreach(array_unique($operadoresNoAgrupado) as $key => $operador) :?>
+        <tr>
+          <td style="padding-left:5px; border:1px solid #000;">
+          	<?php echo $nombreOperadoresArray[$operador]; ?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="real-<?php echo $idChannel;?>">
+            <?php
+            	if(isset($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)])){
+            		if($idChannel == 2)
+            		{
+            			$valorUno[$nombreOperadoresArray[$operador]][]  = array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]);
+            		}
+					if($idChannel == 3)
+					{
+						$valorUno[$nombreOperadoresArray[$operador]][]  = array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]);
+					}
+            		 echo number_format( array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]), 0, '', '.');
+            	}
+				else{
+					echo 0;
+				}
+            ?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="presupuestado-<?php echo $idChannel;?>">
+          	<?php
+				if(!empty($abonadosPresupuestadosNoAgrupados[$idChannel]))
+				{
+					if(isset($abonadosPresupuestadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)])){
+						
+						if($idChannel == 2)
+            			{
+            				$valorUnoPresupuestado[$nombreOperadoresArray[$operador]][] = $abonadosPresupuestadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)];
+            			}
+						
+						if($idChannel == 3)
+            			{
+            				$valorUnoPresupuestado[$nombreOperadoresArray[$operador]][] = $abonadosPresupuestadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)];
+            			}
+						echo number_format($abonadosPresupuestadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)], 0, '', '.');
+					}
+					else 
+					{
+						echo 0;	
+					}
+				}else
+				{
+					echo 0;	
+				}
+          	?>
+          </td>
+          
+            <?php
+
+                if(isset($abonadosNoAgrupados[$idChannel]))
+				{
+					if(isset($abonadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)])){
+						
+						if($idChannel == 1)
+            			{
+            				$basicoPenetracionIngresado[$idChannel][$operador][] = array_sum($abonadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)]);
+            			}
+
+						if($idChannel == 2)
+            			{
+            				$valorDos[$nombreOperadoresArray[$operador]][] = array_sum($abonadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)]);
+            			}
+						
+						if($idChannel == 3)
+            			{
+            				$valorDos[$nombreOperadoresArray[$operador]][] =array_sum($abonadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)]);
+            			}
+						echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="real2-'.$idChannel.'">';
+						echo number_format(array_sum($abonadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)]), 0, '', '.');
+						echo '</td>';
+					}else{
+						if(isset($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]))
+						{
+							echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right; background-color: #E34B39; color:#FFF;" class="real2-'.$idChannel.'">';
+								echo number_format(array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]), 0, '', '.');
+								
+								if($idChannel == 1)
+		            			{
+		            				$basicoPenetracionAnterior[$idChannel][$operador][] = array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]);
+		            			}
+
+								if($idChannel == 2)
+		            			{
+		            				$valorDos[$nombreOperadoresArray[$operador]][] = array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]);
+		            			}
+								
+								if($idChannel == 3)
+		            			{
+		            				$valorDos[$nombreOperadoresArray[$operador]][] = array_sum($abonadosNoAgrupados[$idChannel][$operador][reset($agnosPedidos)][reset($mesesPedidos)]);
+		            			}
+							
+							echo '</td>';
+						}else{
+							echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="real2-'.$idChannel.'">';
+							echo 0;
+							echo "</td>";
+						}
+					}
+				}else{
+					echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class=" real2-'.$idChannel.'">';
+					echo 0;
+					echo "</td>";
+				}
+            ?>
+          
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="presupuestado2-<?php echo $idChannel;?>">
+          	<?php
+          		if(isset($abonadosPresupuestadosNoAgrupados) && !empty($abonadosPresupuestadosNoAgrupados))
+				{
+					
+					if(isset($abonadosPresupuestadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)]))
+					{
+						if($idChannel == 2)
+	            		{
+	            			$valorDosPresupuestado[$nombreOperadoresArray[$operador]][] = $abonadosPresupuestadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)];
+	            		}
+						
+						if($idChannel == 3)
+	            		{
+	            			$valorDosPresupuestado[$nombreOperadoresArray[$operador]][] = $abonadosPresupuestadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)];
+	            		}
+						
+						echo number_format($abonadosPresupuestadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)], 0, '', '.');
+					}
+					else {
+						echo 0;
+					}
+					
+				}else
+				{
+					echo 0;
+				}
+          	
+          	?>
+          </td>
+          	<?php
+
+          		if(!empty($abonadosPromedioRealArray[$idChannel][$operador]))
+				{
+					$meseReales = "";
+					foreach($mesePromedio as $key => $mesePromedios)
+					{
+						if(isset($abonadosPromedioRealArray[$idChannel][$operador][$mesePromedios]))
+						{
+							$meseReales[$mesePromedios] = array_sum($abonadosPromedioRealArray[$idChannel][$operador][$mesePromedios]);
+						}
+					}
+					
+					if(count($meseReales) == count($mesePromedio))
+					{
+						$vacios = "";
+						foreach($meseReales as $key => $valor)
+						{
+							if(empty($valor))
+							{
+								$vacios[$key] = $key - 1;
+							}
+						}
+						$creados = "";
+						
+						if(!empty($vacios))
+						{
+							foreach($vacios as $key => $valor)
+							{
+								$creados[$key] = $meseReales[$valor];
+							}
+							$meseFinal = array_replace($meseReales, $creados);
+							$rojo = "rojo";
+							echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right; background-color: #E34B39; color:#FFF;" class="'.$rojo.'  promedioReal-'.$idChannel.'">';
+							echo number_format(round(array_sum($meseFinal) / count($meseFinal)), 0, '', '.');
+							$realPromedioBasicoUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseFinal) / count($meseFinal));
+
+							if($idChannel == 1)
+		            		{
+								$penetracionBasicoUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							}
+
+							if($idChannel == 2)
+		            		{
+								$promedioMesesUno[ $nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							}
+							
+							if($idChannel == 3)
+		            		{
+								$promedioMesesUno[ $nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							}
+							echo '</td>';
+						}else{
+							echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="promedioReal-'.$idChannel.'">';
+							echo number_format(round(array_sum($meseReales) / count($meseReales)), 0, '', '.');
+							$realPromedioBasicoUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							//pr($realPromedioBasicoUno);
+							if($idChannel == 1)
+		            		{
+								$penetracionBasicoUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							}
+
+
+							if($idChannel == 2)
+		            		{
+								$promedioMesesUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							}
+							
+							if($idChannel == 3)
+		            		{
+								$promedioMesesUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+							}
+							
+							
+							echo '</td>';
+						}
+					}else{
+						$mesFaltante = "";
+						//pr($mesePromedio);
+						foreach($mesePromedio as $key => $valor)
+						{
+							if(!isset($meseReales[$valor]))
+							{
+								$meseReales[$valor] = $meseReales[$valor - 1];
+							}
+						}
+						
+						$rojo = "rojo";
+						echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right; background-color: #E34B39; color:#FFF;" class="'.$rojo. ' promedioReal-'.$idChannel.'">';
+						echo number_format(round(array_sum($meseReales) / count($meseReales)), 0, '', '.');
+
+						if($idChannel == 1)
+	            		{
+							$penetracionBasicoUno[$nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+						}
+						
+						if($idChannel == 2)
+	            		{
+							$promedioMesesUno[ $nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+						}
+						
+						if($idChannel == 3)
+	            		{
+							$promedioMesesUno[ $nombreOperadoresArray[$operador]][] = round(array_sum($meseReales) / count($meseReales));
+						}
+					
+						echo '</td>';
+					}
+				}else{
+					echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="promedioReal-'.$idChannel.'">';
+					echo 0;
+					echo '</td>';
+				}
+          	?>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="promedioPresupuestado-<?php echo $idChannel;?>">
+          	<?php
+          		$realPromedioBasicoDos = "";
+          		if(!empty($abonadosPresupuestadosNoAgrupadosTotal[$idChannel]))
+				{
+					if(isset($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]))
+					{
+						echo number_format(round((array_sum($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]) / count($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]))), 0, '', '.');
+
+						$realPromedioBasicoDos = array_sum($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]) / count($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]);
+
+
+						if($idChannel == 1)
+	            		{
+	            			$penetracionBasicoDos[$nombreOperadoresArray[$operador]][] = array_sum($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]) / count($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]);
+						}
+
+						if($idChannel == 2)
+	            		{
+	            			$presupuestadoMesesUno[$nombreOperadoresArray[$operador]][] = array_sum($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]) / count($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]);
+						}
+
+						if($idChannel == 3)
+	            		{
+	            			$presupuestadoMesesUno[$nombreOperadoresArray[$operador]][] = array_sum($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]) / count($abonadosPresupuestadosNoAgrupadosTotal[$idChannel][$operador]);
+						}
+					}else{
+						echo 0;
+					}
+				}else{
+					echo "0";
+				}
+          	?>
+          	
+          </td>
+        </tr>
+        <?php endforeach; ?>
+        <tr>
+          <td style="padding-left:5px; border:1px solid #000;">otros</td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="real-<?php echo $idChannel;?>">
+           <?php
+           		if(!empty($abonadosAgrupados[$idChannel]))
+				{
+					if(isset($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]))
+					{
+						echo number_format(array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]), 0, '', '.');
+						
+						if($idChannel == 1)
+	            		{
+	            			$otrosRealBasicosUno = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+	            		}
+
+
+						if($idChannel == 2)
+	            		{	
+							$otrosRealUno[] = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+						
+						if($idChannel == 3)
+	            		{	
+							$otrosRealUno[] = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+							
+					}else{
+						echo 0;
+					}
+				}
+				else
+				{
+					echo 0;
+				}
+           ?>
+          </td>
+          	
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="presupuestado-<?php echo $idChannel;?>">
+          	<?php
+          		
+          		if(!empty($abonadosPresupuestadosAgrupados))
+				{
+					if(isset($abonadosPresupuestadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]))
+					{
+						echo number_format(array_sum($abonadosPresupuestadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) , 0, '', '.');
+
+						if($idChannel == 1)
+	            		{	
+							$otrosRealBasicosDos = array_sum($abonadosPresupuestadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+						
+						if($idChannel == 2)
+	            		{	
+							$otrosPresupuestadoUno[] = array_sum($abonadosPresupuestadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+						
+						if($idChannel == 3)
+	            		{
+							$otrosPresupuestadoUno[] = array_sum($abonadosPresupuestadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+					}
+					else
+					{
+						echo 0;
+					}
+				}
+				else
+				{
+					echo 0;	
+				}
+          	?>
+         </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;"class="real2-<?php echo $idChannel;?>">
+              <?php
+              	if(!empty($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) && !empty($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)])){
+              		if(count($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) == count($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]))
+					{
+						echo number_format(array_sum($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]), 0, '', '.');
+						
+						if($idChannel == 1)
+	            		{
+							$otrosRealBasicosTres = array_sum($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]);
+						}
+
+						if($idChannel == 2)
+	            		{
+	            			
+							$otrosRealDos[] = array_sum(array_filter($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]));
+						}
+						
+						if($idChannel == 3)
+	            		{	
+							$otrosRealDos[] = array_sum(array_filter($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]));
+						}
+					
+					}else{
+						
+
+						if($idChannel == 1)
+	            		{
+							$otrosRealBasicosTres = array_sum($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]);
+						}
+
+						
+						
+						if($idChannel == 3)
+	            		{	
+							$otrosRealDos[] = array_sum(array_filter($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]));
+						}
+
+						
+						if(count($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) > count($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]))
+						{
+
+							$nuevoArray = "";
+							
+							//pr($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+							foreach($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)] as $key=>$valor)
+							{
+								if(!isset($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)][$key]))
+								{
+
+									$nuevoArray[$key] = $valor;
+									$nuevoArrayDos[$idChannel][$key] = $valor;
+								}
+							}
+
+							if(count($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]) != count($nuevoArray))
+							{
+								$resultado = array_merge($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)], $nuevoArray);
+							}
+							else
+							{
+
+								$resultado = $abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)];
+							}
+
+
+
+
+							
+							
+							echo number_format(array_sum(array_filter($resultado)), 0, '', '.');
+
+
+							if($idChannel == 1)
+							{
+
+								$otrosRealBasicosTres = array_sum(array_filter($resultado));
+							}
+							
+							if($idChannel == 2)
+		            		{
+
+								$otrosRealDos[] = array_sum(array_filter($resultado));
+								
+							}
+							
+							if($idChannel == 3)
+		            		{	
+								$otrosRealDos[] = array_sum(array_filter($resultado));
+							}
+						}else{
+							$nuevoArray = "";
+							ksort($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+							ksort($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]);
+							foreach($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)] as $key => $valor)
+							{
+								if(!isset($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)][$key]))
+								{
+									$nuevoArray[$key] = $valor;
+								}
+							}
+
+								//array_merge($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)], $nuevoArray);				
+								//$resultado = array_merge($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)], $nuevoArray);
+							
+								$resultado = $abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)];
+							
+
+							echo number_format(array_sum($resultado), 0, '', '.');
+						}
+					}
+              	}else{
+              		if($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)] && !isset($abonadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]))
+					{
+						echo number_format(array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]), 0, '', '.');
+
+						if($idChannel == 1)
+	            		{
+							$otrosRealBasicosTres = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+						
+						if($idChannel == 2)
+	            		{
+							$otrosRealDos[] = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+						
+						if($idChannel == 3)
+	            		{	
+
+							$otrosRealDos[] = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+
+						if($idChannel == 5)
+	            		{	
+							$otrosRealDos[] = array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]);
+						}
+
+					}else{
+						echo 0;
+						
+						if($idChannel == 2)
+	            		{
+							$otrosRealDos[] = 0;
+						}
+						
+						if($idChannel == 3)
+	            		{	
+							$otrosRealDos[] = 0;
+						}
+
+						if($idChannel == 5)
+	            		{	
+							$otrosRealDos[] = 0;
+						}
+					}
+              		
+              	}
+           ?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="presupuestado2-<?php echo $idChannel;?>">
+          	<?php
+          		if(!empty($abonadosPresupuestadosAgrupados))
+				{
+					if(isset($abonadosPresupuestadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]))
+					{
+						echo number_format(array_sum($abonadosPresupuestadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]), 0, '', '.');
+						
+						if($idChannel == 1)
+	            		{	
+							$otrosRealBasicosCuatro = array_sum($abonadosPresupuestadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]);
+						}
+
+						if($idChannel == 2)
+	            		{	
+							$otrosPresupuestadoDos[] = array_sum($abonadosPresupuestadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]);
+						}
+						
+						if($idChannel == 3)
+	            		{	
+							$otrosPresupuestadoDos[] = array_sum($abonadosPresupuestadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]);
+						}
+					}
+					else
+					{
+						echo 0;
+					}
+				}
+				else
+				{
+					echo 0;	
+				}
+          	?>
+          </td>
+          	<?php
+          		$promediorealPenetracion = "";
+          		if(!empty($abonadosPromedioRealArrayx[$idChannel]))
+				{
+					$meseReales = "";
+					foreach($mesePromedio as $key => $mesePromedios)
+					{
+						if(isset($abonadosPromedioRealArrayx[$idChannel][$mesePromedios]))
+						{
+							$meseReales[$mesePromedios] = array_sum($abonadosPromedioRealArrayx[$idChannel][$mesePromedios]);
+						}
+					}
+					
+					if(count($meseReales) == count($mesePromedio))
+					{
+						$vacios = "";
+						foreach($meseReales as $key => $valor)
+						{
+							if(empty($valor))
+							{
+								$vacios[$key] = $key - 1;
+							}
+						}
+						$creados = "";
+						
+						if(!empty($vacios))
+						{
+							foreach($vacios as $key => $valor)
+							{
+								$creados[$key] = $meseReales[$valor];
+							}
+							$meseFinal = array_replace($meseReales, $creados);
+							$rojo = "rojo";
+							echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right; background-color: #E34B39; color:#FFF;" class="'.$rojo.'  promedioReal-'.$idChannel.'">';
+							if($idChannel == 1)
+		            		{
+								$promediorealPenetracionHols = round(array_sum($meseFinal) / count($meseFinal)); 
+							}
+							echo number_format(round(array_sum($meseFinal) / count($meseFinal)), 0, '', '.');
+							if($idChannel == 2)
+		            		{
+								$otrosRealPromedio[] = round(array_sum($meseFinal) / count($meseFinal));
+							}
+							
+							if($idChannel == 3)
+		            		{
+								$otrosRealPromedio[] = round(array_sum($meseReales) / count($meseReales));
+							}
+							echo '</td>';
+						}
+						else
+						{
+							echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="promedioReal-'.$idChannel.'">';
+							/*
+							$sumaAbonadosMeses = "";
+							foreach($abonadosPromedioRealArrayx[$idChannel] as $key => $abonadosMeses)
+							{
+								$sumaAbonadosMeses[] = array_sum($abonadosMeses);
+							}
+
+							pr($sumaAbonadosMeses);
+							//pr(array_sum($abonadosPromedioRealArrayx[$idChannel][1]));
+							//pr($idChannel);
+							
+							pr(array_sum($nuevoArrayDos[$idChannel]));
+							pr(array_sum($meseReales));
+							*/
+
+							if(isset($nuevoArrayDos[$idChannel]))
+							{
+
+								echo number_format((round(array_sum($meseReales)+array_sum($nuevoArrayDos[$idChannel])) / count($meseReales)), 0, '', '.');
+
+								if($idChannel == 1)
+			            		{
+									$promediorealPenetracionHols = round((array_sum($meseReales) + array_sum($nuevoArrayDos[$idChannel])) / count($meseReales));
+								}
+
+								if($idChannel == 2)
+			            		{
+									$otrosRealPromedio[] = round((array_sum($meseReales)+array_sum($nuevoArrayDos[$idChannel])) / count($meseReales));
+								}
+								
+								if($idChannel == 3)
+			            		{
+									$otrosRealPromedio[] = round((array_sum($meseReales)+array_sum($nuevoArrayDos[$idChannel])) / count($meseReales));
+								}
+							}
+							else
+							{
+								echo number_format(round(array_sum($meseReales) / count($meseReales)), 0, '', '.');
+
+								if($idChannel == 1)
+			            		{
+									$promediorealPenetracionHols = round(array_sum($meseReales) / count($meseReales));
+								}
+
+								if($idChannel == 2)
+			            		{
+									$otrosRealPromedio[] = round(array_sum($meseReales) / count($meseReales));
+								}
+								
+								if($idChannel == 3)
+			            		{
+									$otrosRealPromedio[] = round(array_sum($meseReales) / count($meseReales));
+								}
+							}
+							echo '</td>';
+						}
+					}else{
+						$mesFaltante = "";
+						//pr($mesePromedio);
+						foreach($mesePromedio as $key => $valor)
+						{
+							if(!isset($meseReales[$valor]))
+							{
+								$meseReales[$valor] = $meseReales[$valor - 1];
+							}
+						}
+						
+						$rojo = "rojo";
+						echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right; background-color: #E34B39; color:#FFF;" class="'.$rojo. ' promedioReal-'.$idChannel.'">';
+						echo number_format(round(array_sum($meseReales) / count($meseReales)), 0, '', '.');
+						
+						
+						if($idChannel == 2)
+	            		{
+							$otrosRealPromedio[] = round(array_sum($meseReales) / count($meseReales));
+						}
+						
+						if($idChannel == 3)
+	            		{
+							$otrosRealPromedio[]  = round(array_sum($meseReales) / count($meseReales));
+						}
+					
+						echo '</td>';
+					}
+				}else{
+					echo '<td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="promedioReal-'.$idChannel.'">';
+					echo 0;
+					echo '</td>';
+				}
+
+          	?>
+          <!--/td-->
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="promedioPresupuestado-<?php echo $idChannel;?>">
+          	<?php
+          		$promediopresupuestadoPenetracionXXX  = ""; 
+          		if(isset($abonadosPromedioRealArrayOtrosx))
+				{
+					if(isset($abonadosPromedioRealArrayOtrosx[$idChannel]))
+					{
+						echo number_format(round(array_sum($abonadosPromedioRealArrayOtrosx[$idChannel]) / count($mesePromedio)), 0, '', '.');
+						if($idChannel == 1)
+	            		{
+	            			$promediopresupuestadoPenetracion = round(array_sum($abonadosPromedioRealArrayOtrosx[$idChannel]) / count($mesePromedio));
+	            		}
+						
+						if($idChannel == 2)
+	            		{	
+							$otrosPresupuestadoPromedio[] = array_sum($abonadosPromedioRealArrayOtrosx[$idChannel]) / count($mesePromedio);
+						}
+						
+						if($idChannel == 3)
+	            		{	
+							$otrosPresupuestadoPromedio[] = array_sum($abonadosPromedioRealArrayOtrosx[$idChannel]) / count($mesePromedio);
+						}
+					}
+					else
+					{
+						echo 0;
+					}
+				}
+				else
+				{
+					echo 0;
+				}
+          	?>
+          </td>
+        </tr>
+        <tr>
+        	<td style="background-color:#088928; padding-left:5px; border:1px solid #000; color:#FFF;">Total</td>
+        	<td style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;" class="totalReal-<?php echo $idChannel; ?>"></td>
+        	<td style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;" class="totalPresupuestado-<?php echo $idChannel; ?>"></td>
+        	<td style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;" class="totalReal2-<?php echo $idChannel; ?>"></td>
+        	<td style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;" class="totalPresupuestado2-<?php echo $idChannel; ?>"></td>
+        	<td style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;" class="totalPromedioReal-<?php echo $idChannel;?>"></td>
+        	<td style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;" class="totalPromedioPresupuestado-<?php echo $idChannel;?>"></td>
+        </tr>
+      </tbody>
+    </table>
+    <br/>
+    </br/>
+  <?php endforeach; ?>
+  <h4 align="left" >DETALLE ABONADOS OPERADORES - PREMIUM + HD</h4>
+  <?php foreach($operadoresNoAgrupados as $idChannel => $operadoresNoAgrupado) :  ?>
+ 
+  <table style="width: 100%; width: 100%; border-collapse: collapse;" border="1">
+      <tbody>
+        <tr>
+          <td style="width:13%;  background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-top:1px solid #000; border-left:1px solid #000;  border-right: 1px solid #000;">Abonados</td>
+          
+          <?php 
+              foreach($mesesPedidos as $key => $mesesPedido) : 
+                foreach($meses as $mes) :  
+                if($mes["Month"]["id"] == $mesesPedido) : 
+            ?>
+          <td colspan="2" rowspan="1" style="width:29%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;">
+            <?php echo $mes["Month"]["nombre"]; ?> - 
+            <?php 
+            	if(!empty($agnosPedidos))
+				{
+					if(isset($agnosPedidos[$key]))
+					{
+						echo $agnosArray[$agnosPedidos[$key]];
+					}else{
+						echo $agnosArray[reset($agnosPedidos)];
+					}
+				}
+            ?>
+          </td>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endforeach; ?>
+          
+          <td style="width:29%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;" colspan="2" rowspan="1">promedio meses <?php echo $mesesArray[reset($mesePromedio)] . ' - ' .$mesesArray[end($mesePromedio)];?></td>
+        </tr>
+        <tr>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;"></td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real </td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+        </tr>
+       	
+       	<?php foreach(array_unique($operadoresNoAgrupado) as $key => $operador) :?>
+        <tr>
+          <td style="padding-left:5px; border:1px solid #000;"><?php echo $nombreOperadoresArray[$operador]; ?></td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+	          	if(!empty($valorUno[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(array_sum($valorUno[$nombreOperadoresArray[$operador]]), 0, '', '.');
+				}else{
+					echo 0;
+				}
+	          ?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($valorUnoPresupuestado[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(array_sum($valorUnoPresupuestado[$nombreOperadoresArray[$operador]]), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($valorDos[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(array_sum($valorDos[$nombreOperadoresArray[$operador]]), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          	
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($valorDosPresupuestado[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(round(array_sum($valorDosPresupuestado[$nombreOperadoresArray[$operador]])), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($promedioMesesUno[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(round(array_sum($promedioMesesUno[$nombreOperadoresArray[$operador]])), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($presupuestadoMesesUno[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(round(array_sum($presupuestadoMesesUno[$nombreOperadoresArray[$operador]])), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+        </tr>
+       	<?php endForeach;  ?>
+        
+        <tr>
+          <td style="padding-left:5px; border:1px solid #000;">otros</td>
+          <td class="realUnoPremiumHd" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosRealUno))
+				{
+					echo number_format(array_sum($otrosRealUno), 0, '', '.');
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosPresupuestadoUno))
+				{
+					echo number_format(array_sum($otrosPresupuestadoUno), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+
+          		pr($otrosRealDos);
+          		if(!empty($otrosRealDos))
+				{
+					echo number_format(array_sum($otrosRealDos), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($otrosPresupuestadoDos))
+				{
+					echo number_format(array_sum($otrosPresupuestadoDos), 0, '', '.');
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosRealPromedio))
+          		{
+          			echo number_format(round(array_sum($otrosRealPromedio)), 0, '', '.');
+          		}else{
+          			echo 0;
+          		}
+          	?>
+          </td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosPresupuestadoPromedio))
+				{
+					echo number_format(round(array_sum($otrosPresupuestadoPromedio)), 0, '', '.');
+				}else
+				{
+					echo 0;	
+				}
+          	?>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#088928; padding-left:5px; border:1px solid #000; color:#FFF;">Totales</td>
+          <td class="totalUno" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="totalDos" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="totalTres" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="totalCuatro" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="totalCinco" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="totalSeis" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+        </tr>
+        
+      </tbody>
+    </table>
+
+	<br/>
+	<h4 align="left" >Tasa de penetración</h4>
+
+
+    <table style="width: 100%; width: 100%; border-collapse: collapse;" border="1">
+      <tbody>
+        <tr>
+          <td style="width:13%;  background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-top:1px solid #000; border-left:1px solid #000;  border-right: 1px solid #000;">Abonados</td>
+          
+          <?php 
+              foreach($mesesPedidos as $key => $mesesPedido) : 
+                foreach($meses as $mes) :  
+                if($mes["Month"]["id"] == $mesesPedido) : 
+            ?>
+          <td colspan="2" rowspan="1" style="width:29%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;">
+            <?php echo $mes["Month"]["nombre"]; ?> - 
+            <?php 
+            	if(!empty($agnosPedidos))
+				{
+					if(isset($agnosPedidos[$key]))
+					{
+						echo $agnosArray[$agnosPedidos[$key]];
+					}else{
+						echo $agnosArray[reset($agnosPedidos)];
+					}
+				}
+            ?>
+          </td>
+        <?php endif; ?>
+        <?php endforeach; ?>
+        <?php endforeach; ?>
+          
+          <td style="width:29%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000; border-bottom: 1px solid #000; border-top:1px solid #000;" colspan="2" rowspan="1">promedio meses <?php echo $mesesArray[reset($mesePromedio)] . ' - ' .$mesesArray[end($mesePromedio)];?></td>
+        </tr>
+        <tr>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;"></td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real </td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">real</td>
+          <td style="width:14.5%; background-color: #4F80BC; color:#FFF; text-align: center; font-weight: bold; border-top:1px solid #4F80BC; border-right: 1px solid #000;">presupuestado</td>
+        </tr>
+       	
+       	<?php foreach(array_unique($operadoresNoAgrupado) as $key => $operador) : ?>
+        <tr>
+          <td style="padding-left:5px; border:1px solid #000;"><?php echo $nombreOperadoresArray[$operador]; ?></td>
+          <td style="padding-right:10px; border: 1px solid #000; text-align: right;" class="sumaPenetracionReal">
+
+          	<?php 
+	          	if(!empty($valorUno[$nombreOperadoresArray[$operador]]))
+				{
+					//pr(array_sum($valorUno[$nombreOperadoresArray[$operador]]));
+					//pr(array_sum($abonadosNoAgrupados[1][$operador][reset($agnosPedidos)][reset($mesesPedidos)]));
+					//pr($idChannel);
+					//pr($operador);
+					echo number_format((array_sum($valorUno[$nombreOperadoresArray[$operador]]) / array_sum($abonadosNoAgrupados[1][$operador][reset($agnosPedidos)][reset($mesesPedidos)])) * 100, 2, '.', '.') . ' %';
+				}else
+				{
+					echo 0;
+				}
+	          ?>
+          </td>
+          <td class="sumaPenetracionPresupuestado" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($valorUnoPresupuestado[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(array_sum($valorUnoPresupuestado[$nombreOperadoresArray[$operador]]) / $abonadosPresupuestadosNoAgrupados[1][$operador][reset($agnosPedidos)][reset($mesesPedidos)] * 100 , 2, '.', '.') . ' %' ;
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionRealDos" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($valorDos[$nombreOperadoresArray[$operador]]))
+				{
+					if(isset($basicoPenetracionAnterior[1][$operador]))
+					{
+						echo number_format(array_sum($valorDos[$nombreOperadoresArray[$operador]]) / array_sum($basicoPenetracionAnterior[1][$operador]) * 100, 2, '.', '.') . ' %';
+					}
+
+					if(isset($basicoPenetracionIngresado[1][$operador]))
+					{
+						echo number_format(array_sum($valorDos[$nombreOperadoresArray[$operador]]) / array_sum($basicoPenetracionIngresado[1][$operador]) * 100, 2, '.', '.') . ' %';
+					}
+					
+				}else{
+					echo 0;
+				}
+				
+          	?>
+          	
+          </td>
+          <td class="sumaPenetracionPresupuestadoDos" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($valorDosPresupuestado[$nombreOperadoresArray[$operador]]))
+				{
+					//pr($abonadosPresupuestadosNoAgrupados[$idChannel][$operador][end($agnosPedidos)][end($mesesPedidos)]);
+					echo number_format(array_sum($valorDosPresupuestado[$nombreOperadoresArray[$operador]]) / $abonadosPresupuestadosNoAgrupados[1][$operador][end($agnosPedidos)][end($mesesPedidos)] * 100, 2, '.', '.') . ' %';
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionPromedioReal" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($promedioMesesUno[$nombreOperadoresArray[$operador]]))
+				{	
+					echo number_format(array_sum($promedioMesesUno[$nombreOperadoresArray[$operador]]) / $penetracionBasicoUno[$nombreOperadoresArray[$operador]][0] * 100, 2, '.', '.') .' %';
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionPromedioPresupuestado" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($presupuestadoMesesUno[$nombreOperadoresArray[$operador]]))
+				{
+					echo number_format(array_sum($presupuestadoMesesUno[$nombreOperadoresArray[$operador]]) / $penetracionBasicoDos[$nombreOperadoresArray[$operador]][0] * 100, 2, '.', '.') . ' %';
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+        </tr>
+       	<?php endforeach;  ?>
+
+        
+        <tr>
+          <td style="padding-left:5px; border:1px solid #000;">otros</td>
+          <td class="sumaPenetracionReal" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+			if(!empty($otrosRealUno))
+				{
+					//echo number_format(array_sum($otrosRealUno) / array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) * 100   , 2, '.', '.') . ' %';
+					echo number_format(array_sum($otrosRealUno) / $otrosRealBasicosUno * 100   , 2, '.', '.') . ' %';
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionPresupuestado" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosPresupuestadoUno))
+				{
+					//echo number_format(array_sum($otrosPresupuestadoUno) / array_sum($abonadosPresupuestadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) * 100, 2, '.', '.') . ' %';
+
+					echo number_format(array_sum($otrosPresupuestadoUno) /$otrosRealBasicosDos * 100, 2, '.', '.') . ' %';
+
+					
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionRealDos" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosRealDos))
+				{
+
+					
+					//echo number_format(array_sum($otrosRealDos) / array_sum($abonadosAgrupados[$idChannel][reset($agnosPedidos)][reset($mesesPedidos)]) * 100   , 2, '.', '.') . ' %';
+					echo number_format(array_sum($otrosRealDos) / $otrosRealBasicosTres * 100   , 2, '.', '.') . ' %';
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionPresupuestadoDos" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php
+          		if(!empty($otrosPresupuestadoDos))
+				{
+					//echo number_format(array_sum($otrosPresupuestadoDos) / array_sum($abonadosPresupuestadosAgrupados[$idChannel][end($agnosPedidos)][end($mesesPedidos)]) * 100, 2, '.', '.') .' %';
+					echo number_format(array_sum($otrosPresupuestadoDos) / $otrosRealBasicosCuatro * 100, 2, '.', '.') .' %';
+
+				}else{
+					echo 0;
+				}
+          	?>
+          </td>
+          <td class="sumaPenetracionPromedioReal" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosRealPromedio))
+          		{
+
+          			echo number_format(array_sum($otrosRealPromedio) / $promediorealPenetracionHols * 100 , 2, '.', '.') . ' %';
+          		}else{
+          			echo 0;
+          		}
+          	?>
+          </td>
+          <td class="sumaPenetracionPromedioPresupuestado" style="padding-right:10px; border: 1px solid #000; text-align: right;">
+          	<?php 
+          		if(!empty($otrosPresupuestadoPromedio))
+				{
+					echo number_format(array_sum($otrosPresupuestadoPromedio) / $promediopresupuestadoPenetracion * 100, 2, '.', '.') . ' %';
+				}else
+				{
+					echo 0;	
+				}
+          	?>
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color:#088928; padding-left:5px; border:1px solid #000; color:#FFF;">Totales</td>
+          <td class="penetracionUno" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"> </td>
+          <td class="penetracionDos" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="penetracionTres" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="penetracionCuatro" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="penetracionCinco" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+          <td class="penetracionSeis" style="background-color:#088928; padding-right:10px; border: 1px solid #000; text-align: right; color:#FFF;"></td>
+        </tr>
+        
+      </tbody>
+    </table>
+	
+<?php break; endforeach; ?>
+<br/>
+<p>NOTA: Los valores en color rojo corresponden a valores provisionales</p>	
+ <?php endIf; ?>
+
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="informeAbonadosPorEmail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <?php echo $this->Form->create('subscribers', array('action' => 'enviar_informe_abonados')); ?>
+    
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title" id="myModalLabel">Enviar informe de abonados</h4>
+      </div>
+      
+      <div class="modal-body cuerpo">
+      	<div class="progress" style="display:none;">
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                <span class="sr-only">60% Complete</span>
+            </div>
+            <span class="progress-type">Enviando informe de abonados...</span>
+            <span class="progress-completed">60%</span>
+        </div>
+      	<div class="cuerpo2">
+      		<div class="alert alert-info" role="alert"><i class="fa fa-info-circle fa-2x"></i><span> <strong>Seleccione uno o más email existentes o ingrese email nuevos.</strong></span></div>
+	      	<?php echo $this->Form->input('email', array('type'=>'text', 'style'=>'width:100%')); ?>
+	      	<?php echo $this->Form->hidden('titulo', array('type'=>"text", "default"=>'Informe Abonados ' . $mesLogo . ' ' .$agnoLogo)) ?>
+	      	<?php echo $this->Form->hidden('mes', array('type'=>"text", "default"=>$idMes)) ?>
+	      	<?php echo $this->Form->hidden('agno', array('type'=>"text", "default"=>$agno)) ?>
+	      	<?php echo $this->Form->hidden('empresa', array('type'=>"text", "default"=>$idEmpresa)) ?>
+	        <?php echo $this->Form->textArea('codigoHtml', array("class"=>"codigoHtml", 'style'=>'visibility:hidden;' )) ?>
+      	</div>
+      
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        <button type="submit" class="enviaInforme btn btn-primary">Enviar informe de abonados</button>
+      </div>
+      <?php echo $this->Form->end(); ?>
+    </div>
+  </div>
+</div>
+
+<?php echo $this->Form->create('subscribers', array('action' => 'informe_abonado_pdf', 'target'=>'_blank', 'style'=>'visibility:hidden;')); ?>
+  <?php echo $this->Form->textArea('codigoHtmlPdf', array("class"=>"codigoHtml")); ?>
+  <button type="submit" class="exportaPdf btn btn-primary">informeAbonado</button>
+<?php echo $this->Form->end(); ?>
+
+
+<script>
+ 	function addCommas(nStr)
+	{
+		nStr += '';
+		x = nStr.split('.');
+		x1 = x[0];
+		x2 = x.length > 1 ? '.' + x[1] : '';
+		var rgx = /(\d+)(\d{3})/;
+		while (rgx.test(x1)) 
+		{
+			x1 = x1.replace(rgx, '$1' + '.' + '$2');
+		}
+		return x1 + x2;
+	}
+ 	//calculo suma total tabla de penetracion =////
+ 	
+ 	/*
+ 	var sumaPenetracionReal = 0;
+ 	$(".sumaPenetracionReal").each(function () {
+		var valorSumaPenetracionReal = $(this).html().replace(/\s/g, '').replace(/\%/g, '');
+		sumaPenetracionReal += parseFloat(valorSumaPenetracionReal); 
+    });
+    $('.penetracionUno').text(sumaPenetracionReal);
+
+    var sumaPenetracionPresupuestado = 0;
+ 	$(".sumaPenetracionPresupuestado").each(function () {
+		var valorSumaPenetracionPresupuestado = $(this).html().replace(/\s/g, '').replace(/\%/g, '');
+		sumaPenetracionPresupuestado += parseFloat(valorSumaPenetracionPresupuestado); 
+    });
+    $('.penetracionDos').text(sumaPenetracionPresupuestado.toFixed(2));
+
+    var sumaPenetracionRealDos = 0;
+ 	$(".sumaPenetracionRealDos").each(function () {
+		var valorSumaPenetracionRealDos = $(this).html().replace(/\s/g, '').replace(/\%/g, '');
+		sumaPenetracionRealDos += parseFloat(valorSumaPenetracionRealDos); 
+    
+    });
+    $('.penetracionTres').text(sumaPenetracionRealDos.toFixed(2));
+
+
+    var sumaPenetracionPresupuestadoDos = 0;
+ 	$(".sumaPenetracionPresupuestadoDos").each(function () {
+		var valorSumaPenetracionPresupuestadoDos = $(this).html().replace(/\s/g, '').replace(/\%/g, '');
+		sumaPenetracionPresupuestadoDos += parseFloat(valorSumaPenetracionPresupuestadoDos); 
+    
+    });
+    $('.penetracionCuatro').text(sumaPenetracionPresupuestadoDos.toFixed(2));
+
+    var sumaPenetracionPromedioReal = 0;
+ 	$(".sumaPenetracionPromedioReal").each(function () {
+		var valorSumaPenetracionPromedioReal = $(this).html().replace(/\s/g, '').replace(/\%/g, '');
+		sumaPenetracionPromedioReal += parseFloat(valorSumaPenetracionPromedioReal); 
+    });
+    $('.penetracionCinco').text(sumaPenetracionPromedioReal.toFixed(2));
+
+    var sumaPenetracionPromedioPresupuestado = 0;
+ 	$(".sumaPenetracionPromedioPresupuestado").each(function () {
+		var valorSumaPenetracionPromedioPresupuestado = $(this).html().replace(/\s/g, '').replace(/\%/g, '');
+		sumaPenetracionPromedioPresupuestado += parseFloat(valorSumaPenetracionPromedioPresupuestado); 
+    });
+    $('.penetracionSeis').text(sumaPenetracionPromedioPresupuestado.toFixed(2));
+*/
+
+ 	var sumaTotalReal1 = 0;
+    $(".real-1").each(function () {
+		var valorTotalReal1 = $(this).html().replace(/\./g , '');
+		sumaTotalReal1 += parseInt(valorTotalReal1); 
+    });
+    $('.totalReal-1').text(addCommas(sumaTotalReal1));
+    
+    var sumaTotalPresupuestado = 0;
+    $(".presupuestado-1").each(function () {
+		var valorPresupuestado = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado += parseInt(valorPresupuestado); 
+		//alert(valorPresupuestado);
+    });
+    $('.totalPresupuestado-1').text(addCommas(sumaTotalPresupuestado));
+    
+    var sumaTotalReal2 = 0;
+    $(".real2-1").each(function () {
+		var valorTotalReal2 = $(this).html().replace(/\./g , '');
+		sumaTotalReal2 += parseInt(valorTotalReal2); 
+    });
+
+    $('.totalReal2-1').text(addCommas(sumaTotalReal2));
+    var abonadoMes2Basico = sumaTotalReal2; 
+    
+    var sumaTotalPresupuestado2 = 0;
+    $(".presupuestado2-1").each(function () {
+		var valorPresupuestado2 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado2 += parseInt(valorPresupuestado2); 
+    });
+    
+    $('.totalPresupuestado2-1').text(addCommas(sumaTotalPresupuestado2));
+    var sumaTotalPresupuestado2P = sumaTotalPresupuestado2;
+    var sumaTotalPromedioReal = 0;
+    $(".promedioReal-1").each(function () {
+		var valorPromedioReal = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioReal += parseInt(valorPromedioReal); 
+    });
+
+    $('.totalPromedioReal-1').text(addCommas(sumaTotalPromedioReal));
+    
+    var sumaTotalPromedioPresupuestado = 0;
+    $(".promedioPresupuestado-1").each(function () {
+		var valorPromedioPresupuestado = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioPresupuestado += parseInt(valorPromedioPresupuestado); 
+    });
+    $('.totalPromedioPresupuestado-1').text(addCommas(sumaTotalPromedioPresupuestado));
+ 	
+ 	/////2////////////////////////////////
+ 	
+ 	var sumaTotalReal2 = 0;
+    $(".real-2").each(function () {
+		var valorTotalReal2 = $(this).html().replace(/\./g , '');
+		sumaTotalReal2 += parseInt(valorTotalReal2); 
+    });
+    $('.totalReal-2').text(addCommas(sumaTotalReal2));
+    
+    
+    var sumaTotalPresupuestado2 = 0;
+    $(".presupuestado-2").each(function () {
+		var valorPresupuestado2 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado2 += parseInt(valorPresupuestado2); 
+    });
+    $('.totalPresupuestado-2').text(addCommas(sumaTotalPresupuestado2));
+    
+    var sumaTotalReal22 = 0;
+    $(".real2-2").each(function () {
+		var valorTotalReal22 = $(this).html().replace(/\./g , '');
+		sumaTotalReal22 += parseInt(valorTotalReal22); 
+    });
+    $('.totalReal2-2').text(addCommas(sumaTotalReal22));
+    
+    var sumaTotalPresupuestado22 = 0;
+    $(".presupuestado2-2").each(function () {
+		var valorPresupuestado22 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado22 += parseInt(valorPresupuestado22); 
+    });
+    $('.totalPresupuestado2-2').text(addCommas(sumaTotalPresupuestado22));
+    
+    var sumaTotalPromedioReal2 = 0;
+    $(".promedioReal-2").each(function () {
+		var valorPromedioReal2 = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioReal2 += parseInt(valorPromedioReal2); 
+    });
+    $('.totalPromedioReal-2').text(addCommas(sumaTotalPromedioReal2));
+    
+    var sumaTotalPromedioPresupuestado2 = 0;
+    $(".promedioPresupuestado-2").each(function () {
+		var valorPromedioPresupuestado2 = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioPresupuestado2 += parseInt(valorPromedioPresupuestado2); 
+    });
+    $('.totalPromedioPresupuestado-2').text(addCommas(sumaTotalPromedioPresupuestado2));
+    
+    /////3////////////////////////////////
+ 	
+ 	var sumaTotalReal3 = 0;
+    $(".real-3").each(function () {
+		var valorTotalReal3 = $(this).html().replace(/\./g , '');
+		sumaTotalReal3 += parseInt(valorTotalReal3); 
+    });
+    $('.totalReal-3').text(addCommas(sumaTotalReal3));
+    
+    
+    var sumaTotalPresupuestado3 = 0;
+    $(".presupuestado-3").each(function () {
+		var valorPresupuestado3 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado3 += parseInt(valorPresupuestado3); 
+    });
+    $('.totalPresupuestado-3').text(addCommas(sumaTotalPresupuestado3));
+    
+    var sumaTotalReal33 = 0;
+    $(".real2-3").each(function () {
+		var valorTotalReal33 = $(this).html().replace(/\./g , '');
+		sumaTotalReal33 += parseInt(valorTotalReal33); 
+    });
+    $('.totalReal2-3').text(addCommas(sumaTotalReal33));
+    
+    var sumaTotalPresupuestado33 = 0;
+    $(".presupuestado2-3").each(function () {
+		var valorPresupuestado33 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado33 += parseInt(valorPresupuestado33); 
+    });
+    $('.totalPresupuestado2-3').text(addCommas(sumaTotalPresupuestado33));
+    
+    var sumaTotalPromedioReal3 = 0;
+    $(".promedioReal-3").each(function () {
+		var valorPromedioReal3 = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioReal3 += parseInt(valorPromedioReal3); 
+    });
+    $('.totalPromedioReal-3').text(addCommas(sumaTotalPromedioReal3));
+    
+    var sumaTotalPromedioPresupuestado3 = 0;
+    $(".promedioPresupuestado-3").each(function () {
+		var valorPromedioPresupuestado3 = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioPresupuestado3 += parseInt(valorPromedioPresupuestado3); 
+    });
+    $('.totalPromedioPresupuestado-3').text(addCommas(sumaTotalPromedioPresupuestado3));
+
+
+    /////////////////////////////////////5//////////////////////////////////////////////////
+ 	
+   var sumaTotalReal5 = 0;
+    $(".real-5").each(function () {
+		var valorTotalReal5 = $(this).html().replace(/\./g , '');
+		sumaTotalReal5 += parseInt(valorTotalReal5); 
+    });
+    $('.totalReal-5').text(addCommas(sumaTotalReal5));
+    
+    
+    var sumaTotalPresupuestado5 = 0;
+    $(".presupuestado-5").each(function () {
+		var valorPresupuestado5 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado5 += parseInt(valorPresupuestado5); 
+    });
+    $('.totalPresupuestado-5').text(addCommas(sumaTotalPresupuestado5));
+    
+    var sumaTotalReal55 = 0;
+    $(".real2-5").each(function () {
+		var valorTotalReal55 = $(this).html().replace(/\./g , '');
+		sumaTotalReal55 += parseInt(valorTotalReal55); 
+    });
+    $('.totalReal2-5').text(addCommas(sumaTotalReal55));
+    
+    var sumaTotalPresupuestado55 = 0;
+    $(".presupuestado2-5").each(function () {
+		var valorPresupuestado55 = $(this).html().replace(/\./g , '');
+		sumaTotalPresupuestado55 += parseInt(valorPresupuestado55); 
+    });
+    $('.totalPresupuestado2-5').text(addCommas(sumaTotalPresupuestado55));
+    
+    var sumaTotalPromedioReal5 = 0;
+    $(".promedioReal-5").each(function () {
+		var valorPromedioReal5 = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioReal5 += parseInt(valorPromedioReal5); 
+    });
+    $('.totalPromedioReal-5').text(addCommas(sumaTotalPromedioReal5));
+    
+    var sumaTotalPromedioPresupuestado5 = 0;
+    $(".promedioPresupuestado-5").each(function () {
+		var valorPromedioPresupuestado5 = $(this).html().replace(/\./g , '');
+		sumaTotalPromedioPresupuestado5 += parseInt(valorPromedioPresupuestado5); 
+    });
+    $('.totalPromedioPresupuestado-5').text(addCommas(sumaTotalPromedioPresupuestado5));
+
+ 	//////////////////////////totales-Premium HD//////////////////////////
+   var Uno = parseInt(sumaTotalReal2) + parseInt(sumaTotalReal3);
+   var Dos = parseInt(sumaTotalPresupuestado2) + parseInt(sumaTotalPresupuestado3);
+   var Tres = parseInt(sumaTotalReal22) + parseInt(sumaTotalReal33);
+   
+   var Cuatro = parseInt(sumaTotalPresupuestado22) + parseInt(sumaTotalPresupuestado33);
+   
+   var Cinco = parseInt(sumaTotalPromedioReal2) + parseInt(sumaTotalPromedioReal3);
+   var Seis = parseInt(sumaTotalPromedioPresupuestado2) + parseInt(sumaTotalPromedioPresupuestado3);
+   
+   $(".totalUno").text(addCommas(Uno));
+   $(".totalDos").text(addCommas(Dos));
+   $(".totalTres").text(addCommas(Tres));
+   $(".totalCuatro").text(addCommas(Cuatro));
+   $(".totalCinco").text(addCommas(Cinco));
+   $(".totalSeis").text(addCommas(Seis));
+    /////////////////////////////////////////////////////////////////////////////////
+    $('.totalAbonadosMesUno-1').text(addCommas(sumaTotalReal1));
+    $('.totalAbonadosMesDos-1').text(addCommas(abonadoMes2Basico));
+    
+    var restaUno = parseInt(abonadoMes2Basico) - parseInt((sumaTotalReal1));
+	
+	
+    $('.restaVariacion-1').text(addCommas(restaUno));
+    
+    var variacionPorcentaje = parseInt(restaUno) / parseInt(abonadoMes2Basico)  * 100;
+    $('.variacionPorcentaje-1').text(variacionPorcentaje.toFixed(2)+' %');
+    
+    
+    $('.totalAbonadosMesUno-2').text(addCommas(sumaTotalReal2));
+    $('.totalAbonadosMesDos-2').text(addCommas(sumaTotalReal22));
+    var restaDos = parseInt(sumaTotalReal22) - parseInt((sumaTotalReal2));
+    $('.restaVariacion-2').text(addCommas(restaDos));
+    var variacionPorcentajeDos = parseInt(restaDos) / parseInt(sumaTotalReal22)  * 100;
+    $('.variacionPorcentaje-2').text(variacionPorcentajeDos.toFixed(2)+' %');
+    
+    
+    $('.totalAbonadosMesUno-3').text(addCommas(sumaTotalReal3));
+    $('.totalAbonadosMesDos-3').text(addCommas(sumaTotalReal33));
+    var restaTres = parseInt(sumaTotalReal33) - parseInt((sumaTotalReal3));
+    $('.restaVariacion-3').text(addCommas(restaTres));
+    var variacionPorcentajeTres = parseInt(restaTres) / parseInt(sumaTotalReal33)  * 100;
+    $('.variacionPorcentaje-3').text(variacionPorcentajeTres.toFixed(2) +' %');
+    
+    ////////////////////////////////5/////////////////////////////////////////////////////////////
+  
+    $('.totalAbonadosMesUno-5').text(addCommas(sumaTotalReal5));
+    $('.totalAbonadosMesDos-5').text(addCommas(sumaTotalReal55));
+    var restaCinco = parseInt(sumaTotalReal55) - parseInt((sumaTotalReal5));
+    $('.restaVariacion-5').text(addCommas(restaCinco));
+    var variacionPorcentajeCinco = parseInt(restaCinco) / parseInt(sumaTotalReal55)  * 100;
+    $('.variacionPorcentaje-5').text(variacionPorcentajeCinco.toFixed(2)+' %');
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+
+    $('.variacionPresupuestado-1').text(addCommas(sumaTotalPromedioPresupuestado));
+    $('.variacionReal-1').text(addCommas(sumaTotalPromedioReal));
+    var restaPromedioUno = parseInt(sumaTotalPromedioReal) - parseInt(sumaTotalPromedioPresupuestado);
+    $('.restaPromedio-1').text(addCommas(restaPromedioUno));
+    var variacionPromedioUno = parseFloat(restaPromedioUno) / parseFloat(sumaTotalPromedioPresupuestado) * 100;
+    $('.VariacionPromedio-1').text(variacionPromedioUno.toFixed(2) +' %');
+    
+    
+    $('.variacionPresupuestado-2').text(addCommas(sumaTotalPromedioPresupuestado2));
+    $('.variacionReal-2').text(addCommas(sumaTotalPromedioReal2));
+    var restaPromedioDos = parseInt(sumaTotalPromedioReal2) - parseInt(sumaTotalPromedioPresupuestado2);
+    $('.restaPromedio-2').text(addCommas(restaPromedioDos));
+    var variacionPromedioDos = parseInt(restaPromedioDos) / parseInt(sumaTotalPromedioReal2) * 100;
+    $('.VariacionPromedio-2').text(variacionPromedioDos.toFixed(2) +' %');
+    
+    
+    $('.variacionPresupuestado-3').text(addCommas(sumaTotalPromedioPresupuestado3));
+    $('.variacionReal-3').text(addCommas(sumaTotalPromedioReal3));
+    var restaPromedioTres = parseInt(sumaTotalPromedioReal3) - parseInt(sumaTotalPromedioPresupuestado3);
+    $('.restaPromedio-3').text(addCommas(restaPromedioTres));
+    var variacionPromedioTres = restaPromedioTres / sumaTotalPromedioReal3 * 100;
+    
+    $('.VariacionPromedio-3').text(variacionPromedioTres.toFixed(2) +' %');
+
+
+    ////////////////////////////////Variacion presupuestado 5////////////////////////////////////////////////////////////
+	
+	$('.variacionPresupuestado-5').text(addCommas(sumaTotalPromedioPresupuestado5));
+    $('.variacionReal-5').text(addCommas(sumaTotalPromedioReal5));
+    var restaPromedioCinco = parseInt(sumaTotalPromedioReal5) - parseInt(sumaTotalPromedioPresupuestado5);
+    $('.restaPromedio-5').text(addCommas(restaPromedioCinco));
+    var variacionPromedioCinco = restaPromedioCinco / sumaTotalPromedioReal5 * 100;
+    
+    $('.VariacionPromedio-5').text(variacionPromedioCinco.toFixed(2) +' %');
+
+
+    ///////////////////////////////////Penetracion//////////////////////////////////////////////
+    var penetracionMesUno = ((sumaTotalReal2 + sumaTotalReal3)  / sumaTotalReal1) * 100 ;
+    //$('.penetracionMesUno').text(penetracionMesUno.toFixed(2)  +' %');
+    if (!isNaN(sumaTotalReal2))
+    {
+    	$('.penetracionMesUno').text(sumaTotalReal2.toFixed(2)  +' %');
+    }
+    if (!isNaN(sumaTotalReal1))
+    {
+    	$('.penetracionMesUno').text(sumaTotalReal1.toFixed(2)  +' %');
+    }
+    
+    if(sumaTotalReal2 != "" && sumaTotalReal1 != "" && !isNaN(penetracionMesUno))
+    {
+    	$('.penetracionMesUno').text(penetracionMesUno.toFixed(2)  +' %');
+    }else{
+    	$('.penetracionMesUno').text('0 %');
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    var penetracionMesDos = ((sumaTotalReal22 + sumaTotalReal33) / abonadoMes2Basico) * 100;
+    //$('.penetracionMesDos').text(penetracionMesDos.toFixed(2)  +' %');
+    if (!isNaN(sumaTotalReal22))
+    {
+    	$('.penetracionMesDos').text(sumaTotalReal22.toFixed(2)  +' %');
+    }
+    if (!isNaN(abonadoMes2Basico))
+    {
+    	$('.penetracionMesDos').text(abonadoMes2Basico.toFixed(2)  +' %');
+    }
+    
+    if(sumaTotalReal22 != "" && abonadoMes2Basico != "" && !isNaN(penetracionMesDos))
+    {
+    	$('.penetracionMesDos').text(penetracionMesDos.toFixed(2)  +' %');
+    }else{
+    	$('.penetracionMesDos').text('0 %');
+    }
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    var variacion = (penetracionMesDos - penetracionMesUno);
+    //alert(restaDos);
+    //alert(restaTres);
+    //$('.variacion').text(variacion.toFixed(2)  +' %');
+    if (!isNaN(restaDos))
+    {
+    	$('.variacion').text(restaDos.toFixed(2)  +' %');
+    }
+    if (!isNaN(restaUno))
+    {
+    	$('.variacion').text(restaUno.toFixed(2)  +' %');
+    }
+    
+    if(restaDos != "" && restaUno != "" && !isNaN(variacion))
+    {
+    	$('.variacion').text(variacion.toFixed(2)  +' %');
+    }else{
+    	$('.variacion').text('0  %');
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    var variacionPorcentaje = (variacion / penetracionMesUno.toFixed(2)) * 100;
+    //$('.variacionPorcentaje').text(variacionPorcentaje.toFixed(2)  +' %');
+    //alert(variacion.toFixed(2));
+    //alert(penetracionMesUno.toFixed(2))
+    
+    if (!isNaN(variacionPorcentajeDos))
+    {
+    	$('.variacionPorcentaje').text(variacionPorcentajeDos.toFixed(2)  +' %');
+    }
+    if (!isNaN(variacionPorcentaje))
+    {
+    	$('.variacionPorcentaje').text(variacionPorcentaje.toFixed(2)  +' %');
+    }
+    
+    if(variacionPorcentajeDos != "" && variacionPorcentaje != "" && !isNaN(variacionPorcentaje))
+    {
+    	$('.variacionPorcentaje').text(variacionPorcentaje.toFixed(2)  +' %');
+    }else{
+    	$('.variacionPorcentaje').text('0 %');
+    }
+    
+    
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    var presupuestado = ((sumaTotalPromedioPresupuestado2 + sumaTotalPromedioPresupuestado3) / sumaTotalPromedioPresupuestado) * 100;
+   	//$('.presupuestado').text(presupuestado.toFixed(2)  +' %');
+    
+    if (!isNaN(sumaTotalPromedioPresupuestado2))
+    {
+    	$('.presupuestado').text(sumaTotalPromedioPresupuestado2.toFixed(2)  +' %');
+    }
+    if (!isNaN(sumaTotalPromedioPresupuestado))
+    {
+    	$('.presupuestado').text(sumaTotalPromedioPresupuestado.toFixed(2)  +' %');
+    }
+    
+    if(sumaTotalPromedioPresupuestado2 != "" && sumaTotalPromedioPresupuestado != "" && !isNaN(presupuestado))
+    {
+    	$('.presupuestado').text(presupuestado.toFixed(2)  +' %');
+    }else
+    {
+    	$('.presupuestado').text('0 %');
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    var presupuestadoReal = ((sumaTotalPromedioReal2 + sumaTotalPromedioReal3) / sumaTotalPromedioReal) * 100;
+   // $('.presupuestadoReal').text(presupuestadoReal.toFixed(2)  +' %');
+    if (!isNaN(sumaTotalPromedioReal2))
+    {
+    	$('.presupuestadoReal').text(sumaTotalPromedioReal2.toFixed(2)  +' %');
+    }
+    if (!isNaN(sumaTotalPromedioReal))
+    {
+    	$('.presupuestadoReal').text(sumaTotalPromedioReal.toFixed(2)  +' %');
+    }
+    
+    if(sumaTotalPromedioReal2 != "" && sumaTotalPromedioReal != "" && !isNaN(presupuestadoReal))
+    {
+    	$('.presupuestadoReal').text(presupuestadoReal.toFixed(2)  +' %');
+    }else
+    {
+    	$('.presupuestadoReal').text('0 %');
+    }
+
+
+    //////////////////////////////////5//////////////////////////////////////////////////////
+    
+    
+    
+    //////////////////////////////////////////////////////////////////////////
+    
+   
+   // $('.presupuestadoResta').text(presupuestadoResta.toFixed(2)  +' %');
+    var presupuestadoResta = (presupuestadoReal - presupuestado);
+    if (!isNaN(restaPromedioDos))
+    {
+    	$('.presupuestadoResta').text(restaPromedioDos.toFixed(2)  +' %');
+    }
+    if (!isNaN(restaPromedioUno))
+    {
+    	$('.presupuestadoResta').text(restaPromedioUno.toFixed(2)  +' %');
+    }
+    
+    if(!isNaN(restaPromedioDos) != "" && !isNaN(restaPromedioUno) != "" && restaPromedioDos != 0 && restaPromedioUno != 0 && !isNaN(presupuestadoResta))
+    {
+    	
+    	$('.presupuestadoResta').text(presupuestadoResta.toFixed(2)  +' %');
+    }else{
+    	$('.presupuestadoResta').text('0 %');
+    }
+    
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+   	//alert(presupuestadoPromedio);
+    var presupuestadoPromedio = (presupuestadoResta / presupuestado) * 100;
+    if (!isNaN(variacionPromedioDos))
+    {
+    	 $('.presupuestadoPromedio').text(variacionPromedioDos.toFixed(2)  +' %');
+    }
+    
+    if (!isNaN(variacionPromedioUno))
+    {
+    	 $('.presupuestadoPromedio').text(variacionPromedioUno.toFixed(2)  +' %');
+    }
+    
+    if(!isNaN(variacionPromedioDos) != "" && !isNaN(variacionPromedioUno) != "" && variacionPromedioDos != 0 && variacionPromedioUno != 0 && variacionPromedioDos != "" && variacionPromedioUno != "" && !isNaN(presupuestadoPromedio)) 
+    {
+    	 $('.presupuestadoPromedio').text(presupuestadoPromedio.toFixed(2)  +' %');
+    }else{
+    	 $('.presupuestadoPromedio').text('0  %');
+    }
+    
+    /////////////////////////////////////////////////////////////////////////////////
+    
+    //promedioHdPremium
+	$("#envia_informeAbonado").click(function(){
+		var cuerpoHtml = $("#cuerpoHtmlTabla").html();
+		$("#subscribersCodigoHtml").html('<table border="0" cellspacing="0"><tr><td><img src="http://192.168.1.22/img/cdf_pdf.jpg" width="100"></td><td><strong>INFORME ABONADOS </strong><br/>sgi.cdf.cl<br/><?php echo $mesLogo . " - " . $agnoLogo; ?></td></tr></table><br/>' +cuerpoHtml);
+	})
+	
+	$('#subscribersEmail').select2({ tags: [<?php echo $correosInformeAbonados; ?>] });
+	
+	$(".disparaInformeAbonados").click(function(){
+		
+	})
+	
+	var idMes = "<?php echo $idMes;?>";
+	var idAgno = "<?php echo $agno; ?>";
+	var idEmpresa = "<?php echo $idEmpresa; ?>";
+	
+	if(idMes != "" && idAgno != "" && idEmpresa != "")
+	{
+		var cuerpoHtml = $("#cuerpoHtmlTabla").html();
+		
+		$("#subscribersCodigoHtml").html('<table border="0" cellspacing="0"><tr><td><img src="http://192.168.1.22/img/cdf_pdf.jpg" width="100"></td><td><strong>INFORME ABONADOS </strong><br/>sgi.cdf.cl<br/><?php echo $mesLogo . " - " . $agnoLogo; ?></td></tr></table><br/>' +cuerpoHtml);
+		$('#informeAbonadosPorEmail').modal('show');
+		$(".cuerpo2").css("visibility", "hidden");
+		$(".progress").css('display', 'block');
+		$(".modal-footer").css("display", "none");
+		$(".enviaInforme").trigger( "click" );
+	}
+	
+	var cuerpoHtml = $("#cuerpoHtmlTabla").html();
+	$("#subscribersCodigoHtmlPdf").html('<table border="0" cellspacing="0"><tr><td><img src="http://192.168.1.22/img/cdf_pdf.jpg" width="100"></td><td><strong>INFORME ABONADOS </strong><br/>sgi.cdf.cl<br/><?php echo $mesLogo . " - " . $agnoLogo; ?></td></tr></table><br/>' +cuerpoHtml);
+	
+	$('.generarPdf').click(function(){
+		$(".exportaPdf").trigger("click");
+	});
+
+	var penetracionUno =   eval(Uno) / eval(sumaTotalReal1) * 100;
+	if(penetracionUno != "")
+	{
+		$(".penetracionUno").text(penetracionUno.toFixed(2) + ' %')
+	}
+
+	var penetracionDos =   eval(Dos) / eval(sumaTotalPresupuestado) * 100;
+	if(penetracionDos != "")
+	{
+		$(".penetracionDos").text(penetracionDos.toFixed(2) + ' %')
+	}
+
+	var penetracionTres =   eval(Tres) / eval(abonadoMes2Basico) * 100;
+	if(penetracionTres != "")
+	{
+		$(".penetracionTres").text(penetracionTres.toFixed(2) + ' %')
+	}
+	
+
+	var penetracionCuatro =   eval(Cuatro) / eval(sumaTotalPresupuestado2P) * 100;
+	if(penetracionCuatro != "")
+	{
+		$(".penetracionCuatro").text(penetracionCuatro.toFixed(2) + ' %')
+	}
+
+	var penetracionCinco =   eval(Cinco) / eval(sumaTotalPromedioReal) * 100;
+	if(penetracionCinco != "")
+	{
+		$(".penetracionCinco").text(penetracionCinco.toFixed(2) + ' %')
+	}
+
+	var penetracionSeis =   eval(Seis) / eval(sumaTotalPromedioPresupuestado) * 100;
+	if(penetracionSeis != "")
+	{
+		$(".penetracionSeis").text(penetracionSeis.toFixed(2) + ' %')
+	}
+
+	//$(".totalUno").text(addCommas(Uno));
+   //$(".totalDos").text(addCommas(Dos));
+   //$(".totalTres").text(addCommas(Tres));
+   //$(".totalCuatro").text(addCommas(Cuatro));
+   //$(".totalCinco").text(addCommas(Cinco));
+   //$(".totalSeis").text(addCommas(Seis));
+	 
+    
+ </script>

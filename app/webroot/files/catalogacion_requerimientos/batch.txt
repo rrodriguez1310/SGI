@@ -1,0 +1,4 @@
+name	in	out	reel
+compacto	01:57:51:02	02:05:19:03	450
+gol 2 conca	01:43:39:00	01:45:48:00	450
+gol 1 fuenzalida	00:19:41:00	00:21:19:00	449

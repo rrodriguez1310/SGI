@@ -1,0 +1,31 @@
+;CAMPEONATO Scotiabank Clausura 2016-2017;;;;;;PROGRAMACION DE TRANSMISIONES CLARO;;;;;;
+id;LOCAL;;VISITA;ESTADIO;Campeonato;SEÑAL;Horario de puesta en marcha;OPERACION;Medio Tx Id;Medio Tx Nombre;Contacto Estadio;Recepcion de señal en CDF;Anexo
+;;;;;;;;;;;;;
+250;U. Española;v/s;A. Italiano;Santa Laura - Universidad Sek;Scotiabank;Principal;17:40;CLARO;1;Fibra Óptica;Johnny Navarrete;HD 1;212
+;Viernes 19 de mayo de 2017;;;;;Respaldo;17:40;CLARO;2;Micro Ondas;991402978;;
+;Inicio Tx;18:50;;;;RADIO;;;;;;;
+259;U. De Concepcion;v/s;U. Catolica;Bicentenario Ester Roa;Scotiabank;Principal;18:30;CLARO;1;Fibra Óptica;Alejandro Sanchez;;
+;Sábado 20 de mayo de 2017;;;;;Respaldo;;CLARO;1;Fibra Óptica;996411455;HD 2;211
+;Inicio Tx;19:30;;;;RADIO;;;;;;;
+251;Dep. Iquique;v/s;Dep. Temuco;Cavancha;Scotiabank;Principal;10:10;CLARO;1;Fibra Óptica;Rodrigo Cruz;HD 2;210
+;Sábado 20 de mayo de 2017;;;;;Respaldo;;CLARO;1;Fibra Óptica;986625817;;
+;Inicio Tx;11:20;;;;RADIO;;;;;;;
+258;Cobresal;v/s;Colo Colo;La Portada;Scotiabank;Principal;13:05;CLARO;1;Fibra Óptica;Ricardo Avila;HD 3;214
+;Sábado 20 de mayo de 2017;;;;;Respaldo;;CLARO;1;Fibra Óptica;971896097;;
+;Inicio Tx;14:15;;;;RADIO;;;;;;;
+252;U. De Chile;v/s;San Luis;Nacional;Scotiabank;Principal;13:05;CLARO;1;Fibra Óptica;Jonny Navarrete;HD 1;212
+;Sábado 20 de mayo de 2017;;;;;Respaldo;13:05;CLARO;2;Micro Ondas;991402978;;
+;Inicio Tx;14:15;;;;RADIO;;;;;;;
+256;Dep. Antofagasta;v/s;O'Higgins;Bicentenario Calvo Y Bascuñan;Scotiabank;Principal;14:10;CLARO;1;Fibra Óptica;Rodrigo Cruz;HD3;210
+;Domingo 21 de mayo de 2017;;;;;Respaldo;;CLARO;1;Fibra Óptica;986625817;;
+;Inicio Tx;15:20;;;;RADIO;;;;;;;
+255;Palestino;v/s;Everton;Municipal De La Cisterna;Scotiabank;Principal;10:10;CLARO;1;Fibra Óptica;Ismael Morales;HD 1;213
+;Domingo 21 de mayo de 2017;;;;;Respaldo;10:10;CLARO;2;Micro Ondas;992385217;;
+;Inicio Tx;11:20;;;;RADIO;;;;;;;
+257;Huachipato;v/s;S. Wanderers;Huachipato-Cap Acero;Scotiabank;Principal;13:40;CLARO;1;Fibra Óptica;Alejandro Sanchez;HD 3;211
+;Domingo 21 de mayo de 2017;;;;;Respaldo;;CLARO;1;Fibra Óptica;996411455;;
+;Inicio Tx;18:10;;;;RADIO;;;;;;;
+;;;;;;;;;;;;;
+;;;;;;;;;;;;;
+;;;;;;;;;1 = Fibra Óptica;;;;
+;;;;;;;;;2 = Microondas;;;;
