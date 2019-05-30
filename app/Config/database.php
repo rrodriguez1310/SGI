@@ -68,11 +68,11 @@ class DATABASE_CONFIG {
 	public $default = array(
 		'datasource' => 'Database/Postgres',
 		'persistent' => false,
-		'host' => '192.168.1.25',
+		'host' => 'xxx',
 		'port' => '5432',
 		'login' => 'postgres',
-		'password' => 'Canalcdf123',
-		'database' => 'desarrollo_qa',
+		'password' => 'xxx',
+		'database' => 'xxx',
 		//'database' => 'qa',
 		'prefix' => '',
 		'encoding' => 'utf8',
@@ -81,7 +81,7 @@ class DATABASE_CONFIG {
 	public $test = array(
 		'datasource' => 'Database/Mysql',
 		'persistent' => false,
-		'host' => '192.168.2.37',
+		'host' => 'xxx',
 		'login' => 'user',
 		'password' => 'password',
 		'database' => 'test_database_name',
